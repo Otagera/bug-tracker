@@ -54,7 +54,7 @@ export default class EditableContainer extends React.Component {
     });
   }
   handleEnter(e){
-    if(e.code === "Enter"){
+    if(e.code === "Enter" || e.charCode === 13 || e.which === 13){
       this.props.handleEnter(e.target.value);
 
       this.setState({
