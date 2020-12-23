@@ -1,0 +1,36 @@
+.Button{
+	background-color: slateblue;
+	color: white;
+	border-radius: 20px;
+	height: 40px;
+	font-size: 15px;
+	width: max-content;
+	border: none;
+	outline: none;
+	margin-top: 20px;
+	padding: 10px 30px;
+	cursor: pointer;
+}
+.Add_Company:hover{
+  transform: rotate(135deg) scale(1.12);
+  z-index: 5;
+}
+.Add_Company{
+	height: 50px;
+	width: 50px;
+	background-color: slateblue;
+	margin-right: 10px;
+	margin-left: auto;
+	margin-top: 10px;
+	border-radius: 50%;
+	background-image: url('../../../assets/svgs/icon-remove.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 24px;
+	transform: rotate(45deg);
+	transition-delay: 0.01s;
+	transition-timing-function: ease-in-out;
+	transition-property: z-index, transform;
+	transition-duration: 0.5s;
+	cursor: pointer;
+}

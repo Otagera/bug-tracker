@@ -1,0 +1,31 @@
+.Modal {
+    position: fixed;
+    z-index: 500;
+    background-color: white;
+    width: 90%;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px black;
+    padding: 16px;
+    left: 5%;
+    top: 10%;
+    bottom: 5%;
+    box-sizing: border-box;
+    transition: all 0.3s ease-out;
+}
+.Successfull {
+    border: 2px solid hsl(180, 52%, 96%);
+    border-radius: 5px;
+    background-color: hsl(180, 29%, 50%);
+}
+.Successfull button{
+    background-color: hsl(180, 52%, 96%);
+    outline: none;
+    border: none;
+    cursor: pointer; 
+}
+@media (min-width: 600px) {
+    .Modal {
+        width: 500px;
+        left: calc(50% - 250px);
+    }
+}

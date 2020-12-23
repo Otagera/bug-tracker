@@ -1,0 +1,105 @@
+.FlexRow{
+	display: flex;
+	flex-direction: row;
+}
+.InputGroup{
+  text-align: left;
+  height: 35px;
+  margin: auto;
+  width: 100%;
+}
+.InputGroup:nth-last-of-type(1) { padding-bottom: 30px; }
+.InputGroup label{
+	margin: 0;
+	width: 45%;
+	padding: 5px;
+}
+.InputGroup input{
+	border-radius: 5px;
+	margin: 0;
+	width: 45%;
+	outline: none;
+	border: 1px solid #ccc;
+	background-color: white;
+	font: inherit;
+	padding: 6px 10px;
+	display: block;
+	box-sizing: border-box;
+}
+.InputGroup input.Input{
+	width: 80%;
+	margin: auto;
+	background-color: white;
+	border-radius: 5px;
+	padding: 10px 50px;	
+	border: 1px solid black;
+}
+.InputGroup input.Search{
+	width: 75%;
+	margin: auto;
+	border-top: 0;
+	border-right: 0;
+	border-left: 0;
+	background-color: rgba(white, 0.1);
+}
+.InputGroup input:focus{
+	outline: none;
+	background-color: #ccc;
+}
+.InputGroup input[type="submit"]{
+    margin: 20px auto 20px;
+    height: 30px;
+    width: 60%;
+    cursor: pointer;
+    opacity: .5;
+}
+.InputGroup input[type="submit"]:hover{
+    opacity: 1;
+}
+.InputGroup input[type="submit"]:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+.InputGroup button{
+    margin: 20px auto 20px;
+    height: 30px;
+    width: 60%;
+}
+.InputGroup button:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+.InputGroup input.Invalid {
+    border: 1px solid red;
+}
+.InputGroup span.IconSpan {
+    position: relative;
+}
+.InputGroup span.IconSpan .EyeIcon {
+	position: absolute;
+	left: auto;
+	right: 10px;
+	text-indent: 32px;
+	top: 25px;
+	cursor: pointer;
+}
+.InputGroup span.Validate_error{
+    position: relative;
+}
+.InputGroup span.Validate_error .Validate_error_text{
+	width: 280px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	font-size: 14px;
+	top: 55px;
+	color: #f90808cc;
+}
+@media (max-width: 500px) {
+	.InputGroup{
+	    grid-column: 1/7;
+	}
+	.InputGroup span.IconSpan .EyeIcon {
+		top: 10px;
+	}
+}
