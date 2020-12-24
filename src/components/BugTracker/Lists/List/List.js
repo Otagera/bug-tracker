@@ -42,6 +42,11 @@ class List extends Component {
 		tempList.actions[index].done = !tempDone;
 		this.setState({ list: tempList });
 	}
+	editItem = (index, value) =>{
+		const tempList = { ...this.state.list };
+		tempList.actions[index].title = value;
+		this.setState({ list: tempList });
+	}
 	addItem = (value) =>{
 		const tempList = { ...this.state.list };
 		tempList.actions.push({ title: value, done: false });
@@ -57,6 +62,7 @@ class List extends Component {
 					<li className={styles.List_ul_li}>
 						<div className={styles.List_ul_li_check}></div>
 						<EditableContainer
+							doubleClick={false}
 							handleEnter={this.addItem}
 							className={[styles.List_ul_li_title, styles.List_ul_li_new].join(' ')}>
 							Write new Task
@@ -80,9 +86,12 @@ class List extends Component {
 											  null
 										}
 									</div>
-									<p className={styles.List_ul_li_title}>
-                                        {action.title}
-                                    </p>
+									<EditableContainer
+										doubleClick={true}
+										handleEnter={this.editItem.bind(null, i)} 
+										className={styles.List_ul_li_title} >
+		                                    {action.title}
+									</EditableContainer>
 								</li>
 							)
 						})
@@ -90,6 +99,7 @@ class List extends Component {
 						<li className={styles.List_ul_li}>
 							<div className={styles.List_ul_li_check}></div>
 							<EditableContainer
+								doubleClick={false}
 								handleEnter={this.addItem}
 								className={[styles.List_ul_li_title, styles.List_ul_li_new].join(' ')}>
 								Write new Task

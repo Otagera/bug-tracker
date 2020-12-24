@@ -45,6 +45,8 @@
 }
 .Header{
 	color: slateblue;
+	text-align: left;
+	padding-left: 35px;
 }
 @media (max-width: 500px) {
 	.Lists{

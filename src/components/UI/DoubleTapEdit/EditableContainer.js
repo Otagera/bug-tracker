@@ -4,10 +4,9 @@ import Field from './FieldStyle';
 
 export default class EditableContainer extends React.Component {
   constructor (props) {
-    super(props)
-
+    super(props);
     // init counter
-    this.count = 0
+    this.count = 0;
 
     // init state
     this.state = {
@@ -18,16 +17,16 @@ export default class EditableContainer extends React.Component {
 
   componentWillUnmount () {
     // cancel click callback
-    if (this.timeout) clearTimeout(this.timeout)
+    if (this.timeout) clearTimeout(this.timeout);
   }
 
-  handleClick (e) {
+  handleDoubleClick (e) {
     // cancel previous callback
     if (this.timeout) clearTimeout(this.timeout)
 
     // increment count
-    this.count++
-
+    this.count++;
+  
     // schedule new callback  [timeBetweenClicks] ms after last click
     this.timeout = setTimeout(() => {
       // listen for double clicks
@@ -35,6 +34,7 @@ export default class EditableContainer extends React.Component {
         // turn on edit mode
         this.setState({
           edit: true,
+          value: e.target.textContent
         })
       }
 
@@ -42,6 +42,12 @@ export default class EditableContainer extends React.Component {
       this.count = 0
     }, 250) // 250 ms
     //}, settings.timeBetweenClicks) // 250 ms
+  }
+
+  handleSingleClick (e) {
+    this.setState({
+      edit: true,
+    });
   }
 
   handleBlur (e) {
@@ -65,8 +71,8 @@ export default class EditableContainer extends React.Component {
   }
 
   render () {
-    const {children, ...rest} = this.props
-    const {edit, value} = this.state
+    const {doubleClick, handleEnter, children, ...rest} = this.props;
+    const {edit, value} = this.state;
     if (edit) {
       // edit mode
       return (
@@ -79,14 +85,25 @@ export default class EditableContainer extends React.Component {
       )
     } else {
       // view mode
-      return (
-        <p
-          onClick={this.handleClick.bind(this)}
-          {...rest}
-        >
-          {children}
-        </p>
-      )
+      if(doubleClick){
+        return (
+          <p
+            onClick={this.handleDoubleClick.bind(this)}
+            {...rest}
+          >
+            {children}
+          </p>
+        )
+      }else{
+        return (
+          <p
+            onClick={this.handleSingleClick.bind(this)}
+            {...rest}
+          >
+            {children}
+          </p>
+        )        
+      }
     }
   }
 }

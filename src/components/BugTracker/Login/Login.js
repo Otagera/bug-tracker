@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import styles from './Login.module.css';
 import InputGroup from '../../UI/InputGroup/InputGroup';
 import Button from '../../UI/Button/Button';
 import Modal from '../../UI/Modal/Modal';
@@ -56,7 +57,7 @@ class Login extends Component{
 		}
 		return (
 			<div>
-				<Logo />
+				<Logo className={styles.Logo} />
 				<h2>Log in to continue</h2>
 				<p>A special link would be sent to your email</p>
 				{
