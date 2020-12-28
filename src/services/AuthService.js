@@ -2,12 +2,20 @@ import axios from 'axios';
 
 class AuthService {
 	login(fd){
-		return axios.post('/users/login', fd)
-		    		.then(response=>{
-		    			if(response.data.token){
+		let headersObj = {
+			'content-type': 'application/json'
+		}
+		return axios({
+						method: 'post',
+						url: '/auth/email/login',
+						data: fd,
+						headers: headersObj
+					}).then(response=>{
+		    			/*if(response.data.token){
 		    				localStorage.setItem('user', JSON.stringify({ token: response.data.token }));
 		    			}
-		    			return { success: true };
+		    			return { success: true };*/
+		    			return response;
 		    		})
 		    		.catch(err=>{
 		    			return { error: true };
@@ -16,13 +24,19 @@ class AuthService {
 	logout(){
 		localStorage.removeItem('user');
 	}
-	register(fd){
-		return axios.post('/users/signup', fd)
-    				.then(response=>{
-    		 			return { success: true };
-    				})
-		    		.catch(err=>{
-		    			return { error: true };
+	signup(fd){
+		let headersObj = {
+			'content-type': 'application/json'
+		}
+		return axios({
+						method: 'post',
+						url: '/auth/email/signup',
+						data: fd,
+						headers: headersObj
+					}).then(response=>{
+    		 			return response;
+    				}).catch(err=>{
+		    			return { error: err };
 		    		});
     }
     getCurrentUser(){

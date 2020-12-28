@@ -94,7 +94,7 @@ class Lists extends Component {
 				<h2 className={styles.Header}>Lists</h2>
 				{listsToDisplay}
                 <div className={styles.Add}>
-    				<Button addLink={getStarted}></Button>                    
+    				<Button addLink={getStarted} buttonType='addLink'></Button>                    
                 </div>
 			</div>
 		);

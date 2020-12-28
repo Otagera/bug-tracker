@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import swal from '@sweetalert/with-react';
 
 import styles from './Login.module.css';
 import InputGroup from '../../UI/InputGroup/InputGroup';
 import Button from '../../UI/Button/Button';
-import Modal from '../../UI/Modal/Modal';
+import Loader from '../../UI/Loader/Loader';
 import Logo from '../../UI/Logo/Logo';
 import FormValidation from '../../../services/FormValidation';
+import AuthService from '../../../services/AuthService';
 
 class Login extends Component{
 	state={
@@ -19,7 +21,7 @@ class Login extends Component{
 				},
 				elementTitle: 'Email',
 				elementName: 'email',
-				value: '',
+				value: 'ikwuje24@gmail.com',
 				validation: {
 					required: true,
 					email: true
@@ -28,7 +30,13 @@ class Login extends Component{
 				touched: false
 			}
 		},
-		showModal: false
+		showLoader: false,
+		redirect: false
+	}
+
+	componentWillUnmount () {
+		// cancel click callback
+		if (this.timeout) clearTimeout(this.timeout);
 	}
 	handleInputValue = (value, name)=>{
 		let formData = { ...this.state.formData };
@@ -43,11 +51,42 @@ class Login extends Component{
 
 		this.setState({ formData: formData, formIsValid: formIsValid });
 	}
-	removeModal = () =>{
-		this.setState({ showModal: false });
+    handleSubmit = (e)=>{
+    	e.preventDefault();
+		this.setState({ showLoader: true });
+    	let fd = JSON.stringify({
+		    		email: this.state.formData.email.value
+		    	});
+        AuthService.login(fd).then(response=>{
+        	console.log(response);
+			this.timeout = setTimeout(()=>{
+		    	this.handleContinue();
+			}, 2500);
+        }, error=>{
+    		this.setState({ error: true });
+        });
+    }
+	handleContinue = () =>{
+		swal({
+			text: 'Login ',
+			icon: 'success',
+			content:(
+				<div>
+					<Logo className={styles.Logo} />
+					<h2>Login Successfull</h2>
+					<p>A special link has been sent to your email.</p>
+				</div>
+			)
+		}).then(ok=>{
+			if(ok){
+				this.setState({ redirect: true, showLoader: false});
+			}
+		});
 	}
 	render(){
-		const { formData, showModal } = this.state;
+		const { formData, showLoader, redirect } = this.state;
+		let redirecter = null;
+		const buttonStyle = [styles.Button];
 		let formElementArray = [];
 		for(let key in formData){
 			formElementArray.push({
@@ -55,8 +94,10 @@ class Login extends Component{
 				config: formData[key]
 			});
 		}
+		if(redirect){ redirecter = <Redirect to='/' />}
 		return (
 			<div>
+				{redirecter}
 				<Logo className={styles.Logo} />
 				<h2>Log in to continue</h2>
 				<p>A special link would be sent to your email</p>
@@ -80,22 +121,16 @@ class Login extends Component{
 						)}
 					)
 				}
-				<Button>Continue</Button>
+				<Button
+				 	clicked={this.handleSubmit}
+				 	styleParent={buttonStyle}
+				 	enable={!showLoader} >
+					{(showLoader)?
+						<Loader width={`20`} />:
+						`Continue`}
+				</Button>
 				<p>Need an account? <Link to='/signup'>Sign Up</Link></p>
 				<Link to='/'>Home</Link>
-				<Modal
-					show={showModal}
-					modalClosed={this.removeModal}
-					successfull={true}>
-					<div>
-						<h4>Log In</h4>
-						<p>
-							A magic link has been sent to your email.
-							Please check your email and click on that link to continue.
-						</p>
-						<Button clicked={this.removeModal}>Okay</Button>
-					</div>
-				</Modal>
 			</div>
 		);
 	}

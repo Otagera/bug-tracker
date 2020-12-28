@@ -1,30 +1,19 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import swal from '@sweetalert/with-react';
 
-import styles from './Signup.module.css';
-import InputGroup from '../../UI/InputGroup/InputGroup';
-import Button from '../../UI/Button/Button';
-import Loader from '../../UI/Loader/Loader';
-import Logo from '../../UI/Logo/Logo';
-import FormValidation from '../../../services/FormValidation';
-import AuthService from '../../../services/AuthService';
-
-class Signup extends Component{
+class EnterName extends Component {
 	state={
 		formData:{
-			email: {
+			name: {
 				elementType: 'input',
 				elementConfig: {
-					type: 'email',
-					placeholder: 'Your Email'
+					type: 'name',
+					placeholder: 'Your Name'
 				},
-				elementTitle: 'Email',
-				elementName: 'email',
-				value: 'otagera@gmail.com',
+				elementTitle: 'Name',
+				elementName: 'name',
+				value: '',
 				validation: {
-					required: true,
-					email: true
+					required: true
 				},
 				valid: false,
 				touched: false
@@ -33,15 +22,13 @@ class Signup extends Component{
 		showLoader: false,
 		redirect: false
 	}
-
 	componentWillUnmount () {
-		// cancel click callback
 		if (this.timeout) clearTimeout(this.timeout);
 	}
 	handleInputValue = (value, name)=>{
 		let formData = { ...this.state.formData };
 		formData[name].value = value;
-		formData[name].valid = FormValidation.checkValidity(formData[name].value, formData[name].validation);
+		formData[name].valid = FormValidation.checkValidity(formData[name].value, formData[name].validation, formData.password.value);
 		formData[name].touched = true;
 
 		let formIsValid = true;
@@ -55,25 +42,26 @@ class Signup extends Component{
     	e.preventDefault();
 		this.setState({ showLoader: true });
     	let fd = JSON.stringify({
-		    		email: this.state.formData.email.value
+		    		name: this.state.formData.name.value
 		    	});
-        AuthService.signup(fd).then(response=>{
-	    	this.timeout = setTimeout(()=>{
-		    	this.handleContinue();	    		
-	    	}, 2500);
+        /*AuthService.login(fd).then(response=>{
+        	console.log(response);
+			this.timeout = setTimeout(()=>{
+		    	this.handleContinue();
+			}, 2500);
         }, error=>{
     		this.setState({ error: true });
-        });
+        });*/
     }
 	handleContinue = () =>{
 		swal({
-			text: 'Signup ',
+			text: 'Login ',
 			icon: 'success',
 			content:(
 				<div>
 					<Logo className={styles.Logo} />
-					<h2>Signup Successfull</h2>
-					<p>A special link has been sent to your email.</p>
+					<h2>Login Successfull</h2>
+					<p>You can now view your desired list.</p>
 				</div>
 			)
 		}).then(ok=>{
@@ -98,7 +86,7 @@ class Signup extends Component{
 			<div>
 				{redirecter}
 				<Logo className={styles.Logo} />
-				<h2>Signup to continue</h2>
+				<h2>Log in to continue</h2>
 				<p>A special link would be sent to your email</p>
 				{
 					formElementArray.map((formElement)=>{
@@ -128,10 +116,10 @@ class Signup extends Component{
 						<Loader width={`20`} />:
 						`Continue`}
 				</Button>
-				<p>Have an account? <Link to='/login'>Log In</Link></p>
+				<p>Need an account? <Link to='/signup'>Sign Up</Link></p>
 				<Link to='/'>Home</Link>
 			</div>
 		);
 	}
 }
-export default Signup;
+export default EnterName;

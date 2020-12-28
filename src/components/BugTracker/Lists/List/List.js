@@ -120,7 +120,7 @@ class List extends Component {
 				</div>
 				{listToDisplay}
                 <div className={styles.Add}>
-    				<Button addLink={getStarted}></Button>                    
+    				<Button addLink={getStarted} buttonType='addLink'></Button>                    
                 </div>
 				<Modal
 					show={showModal}

@@ -89,10 +89,10 @@
 .InputGroup span.Validate_error .Validate_error_text{
 	width: 280px;
 	position: absolute;
-	left: 0;
+	left: 50px;
 	right: 0;
 	font-size: 14px;
-	top: 55px;
+	top: 80px;
 	color: #f90808cc;
 }
 @media (max-width: 500px) {

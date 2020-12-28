@@ -13,7 +13,7 @@ const getStarted = ( props )=>{
 			<h2 className={styles.Heading}>Where talents work with clients</h2>
 			<p className={styles.Text}>Work on projects, fix bugs and manage features request.</p>
 			<div className={styles.Button}>
-				<Button link={getStarted}>Get started</Button>				
+				<Button link={getStarted} buttonType={'link'}>Get started</Button>				
 			</div>
 			<br />
 			<Link to='/lists' className={styles.Link}>Lists</Link>
