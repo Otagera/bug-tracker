@@ -21,7 +21,7 @@ class Login extends Component{
 				},
 				elementTitle: 'Email',
 				elementName: 'email',
-				value: 'ikwuje24@gmail.com',
+				value: 'otagera@gmail.com',
 				validation: {
 					required: true,
 					email: true
@@ -58,21 +58,20 @@ class Login extends Component{
 		    		email: this.state.formData.email.value
 		    	});
         AuthService.login(fd).then(response=>{
-        	console.log(response);
 			this.timeout = setTimeout(()=>{
 		    	this.handleContinue();
-			}, 2500);
+			}, 500);
         }, error=>{
     		this.setState({ error: true });
         });
     }
 	handleContinue = () =>{
 		swal({
-			text: 'Login ',
+			text: 'Login',
 			icon: 'success',
 			content:(
 				<div>
-					<Logo className={styles.Logo} />
+					<Logo className={styles.Logo} withOutLink={true} />
 					<h2>Login Successfull</h2>
 					<p>A special link has been sent to your email.</p>
 				</div>

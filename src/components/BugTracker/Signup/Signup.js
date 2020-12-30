@@ -60,7 +60,7 @@ class Signup extends Component{
         AuthService.signup(fd).then(response=>{
 	    	this.timeout = setTimeout(()=>{
 		    	this.handleContinue();	    		
-	    	}, 2500);
+	    	}, 500);
         }, error=>{
     		this.setState({ error: true });
         });
@@ -71,7 +71,7 @@ class Signup extends Component{
 			icon: 'success',
 			content:(
 				<div>
-					<Logo className={styles.Logo} />
+					<Logo className={styles.Logo} withOutLink={true}/>
 					<h2>Signup Successfull</h2>
 					<p>A special link has been sent to your email.</p>
 				</div>

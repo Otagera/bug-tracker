@@ -7,6 +7,8 @@ import Signup from './Signup/Signup';
 import Login from './Login/Login';
 import Lists from './Lists/Lists';
 import List from './Lists/List/List';
+import MagikLinkLanding from './MagikLinkLanding/MagikLinkLanding';
+import EnterName from './Signup/EnterName';
 import NotFound from './NotFound';
 
 class BugTracker extends Component {
@@ -27,9 +29,19 @@ class BugTracker extends Component {
 						component={()=><Signup />}
 					/>
 					<Route 
+						path='/signup/enter-name'
+						exact
+						component={()=><EnterName />}
+					/>
+					<Route 
 						path='/login'
 						exact
 						component={()=><Login />}
+					/>
+					<Route 
+						path='/sweet/token/:token'
+						exact
+						component={()=><MagikLinkLanding />}
 					/>
 					<Route 
 						path='/lists'
@@ -42,7 +54,7 @@ class BugTracker extends Component {
 						component={()=><List />}
 					/>
 					<Route component={()=><NotFound />} />
-				</Switch>				
+				</Switch>
 			</Aux>
 		);
 	}

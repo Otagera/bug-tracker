@@ -1,4 +1,14 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
+import swal from '@sweetalert/with-react';
+
+import styles from './Signup.module.css';
+import Logo from '../../UI/Logo/Logo';
+import InputGroup from '../../UI/InputGroup/InputGroup';
+import Button from '../../UI/Button/Button';
+import Loader from '../../UI/Loader/Loader';
+import FormValidation from '../../../services/FormValidation';
+import AuthService from '../../../services/AuthService';
 
 class EnterName extends Component {
 	state={
@@ -28,7 +38,7 @@ class EnterName extends Component {
 	handleInputValue = (value, name)=>{
 		let formData = { ...this.state.formData };
 		formData[name].value = value;
-		formData[name].valid = FormValidation.checkValidity(formData[name].value, formData[name].validation, formData.password.value);
+		formData[name].valid = FormValidation.checkValidity(formData[name].value, formData[name].validation);
 		formData[name].touched = true;
 
 		let formIsValid = true;
@@ -44,23 +54,22 @@ class EnterName extends Component {
     	let fd = JSON.stringify({
 		    		name: this.state.formData.name.value
 		    	});
-        /*AuthService.login(fd).then(response=>{
-        	console.log(response);
+        AuthService.updateName(fd).then(response=>{
 			this.timeout = setTimeout(()=>{
 		    	this.handleContinue();
 			}, 2500);
         }, error=>{
     		this.setState({ error: true });
-        });*/
+        });
     }
 	handleContinue = () =>{
 		swal({
-			text: 'Login ',
+			text: 'Name change',
 			icon: 'success',
 			content:(
 				<div>
-					<Logo className={styles.Logo} />
-					<h2>Login Successfull</h2>
+					<Logo className={styles.Logo} withOutLink={true} />
+					<h2>Your name has successfully been updated</h2>
 					<p>You can now view your desired list.</p>
 				</div>
 			)
@@ -86,8 +95,7 @@ class EnterName extends Component {
 			<div>
 				{redirecter}
 				<Logo className={styles.Logo} />
-				<h2>Log in to continue</h2>
-				<p>A special link would be sent to your email</p>
+				<h2>Just your name</h2>
 				{
 					formElementArray.map((formElement)=>{
 						const { id, config } = formElement;
@@ -116,8 +124,6 @@ class EnterName extends Component {
 						<Loader width={`20`} />:
 						`Continue`}
 				</Button>
-				<p>Need an account? <Link to='/signup'>Sign Up</Link></p>
-				<Link to='/'>Home</Link>
 			</div>
 		);
 	}

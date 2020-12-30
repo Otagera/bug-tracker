@@ -7,7 +7,8 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <BugTracker />
-      </div> </BrowserRouter>
+      </div>
+     </BrowserRouter>
   );
 }
 export default App;
