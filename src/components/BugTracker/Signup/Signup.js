@@ -58,6 +58,7 @@ class Signup extends Component{
 		    		email: this.state.formData.email.value
 		    	});
         AuthService.signup(fd).then(response=>{
+        	console.log(response);
 	    	this.timeout = setTimeout(()=>{
 		    	this.handleContinue();	    		
 	    	}, 500);

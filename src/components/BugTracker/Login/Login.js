@@ -58,6 +58,7 @@ class Login extends Component{
 		    		email: this.state.formData.email.value
 		    	});
         AuthService.login(fd).then(response=>{
+        	console.log(response);
 			this.timeout = setTimeout(()=>{
 		    	this.handleContinue();
 			}, 500);
