@@ -22,7 +22,7 @@ class Login extends Component{
 				},
 				elementTitle: 'Email',
 				elementName: 'email',
-				value: 'otagera@gmail.com',
+				value: '',
 				validation: {
 					required: true,
 					email: true

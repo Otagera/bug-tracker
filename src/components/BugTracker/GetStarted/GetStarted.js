@@ -18,7 +18,7 @@ const getStarted = ( props )=>{
 			<br />
 			<Link to='/lists' className={styles.Link}>Lists</Link>
 			<Link
-				to='/sweet/token/5feb038fb3f7d7460600ffa7af2d944248d52a1d0cf02' >
+				to='/sweet/token/' >
 				Magik Link Landing
 			</Link>
 		</div>
