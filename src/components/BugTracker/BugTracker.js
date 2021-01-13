@@ -49,7 +49,7 @@ class BugTracker extends Component {
 						component={()=><Lists />}
 					/>
 					<Route 
-						path='/list'
+						path='/list/:listId'
 						exact
 						component={()=><List />}
 					/>

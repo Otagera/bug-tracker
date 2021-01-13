@@ -11,12 +11,7 @@ class AuthService {
 						url: '/auth/email/login',
 						data: fd,
 						headers: headersObj
-					}).then(response=>{
-		    			return response;
-		    		})
-		    		.catch(err=>{
-		    			return { error: true };
-		    		});
+					});
 	}
 	signup(fd){
 		let headersObj = {
@@ -27,11 +22,7 @@ class AuthService {
 						url: '/auth/email/signup',
 						data: fd,
 						headers: headersObj
-					}).then(response=>{
-    		 			return response;
-    				}).catch(err=>{
-		    			return { error: err };
-		    		});
+					});
     }
     authenticateToken(fd){
 		let headersObj = {
@@ -42,15 +33,7 @@ class AuthService {
 						url: '/auth/verify/token',
 						data: fd,
 						headers: headersObj
-					}).then(response=>{
-		    			if(response.data.code === 200 && response.data.data.token){
-		    				console.log(response.data.data.token);
-		    				localStorage.setItem('user', JSON.stringify({ token: response.data.data.token }));
-		    			}
-    		 			return response;
-    				}).catch(err=>{
-		    			return { error: err };
-		    		});
+					});
     }
     updateName(fd){
     	let headersObj = {
@@ -62,10 +45,6 @@ class AuthService {
 			    		url: '/user/update/name',
 			    		data: fd,
 			    		headers: headersObj
-			    	}).then(response=>{
-			    		return response;
-			    	}).catch(err=>{
-			    		return { error: err };
 			    	});
     }
 	logout(){

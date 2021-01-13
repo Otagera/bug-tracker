@@ -1,30 +1,37 @@
 export {
-	addCompanyInit,
-	addCompanyRequest,
-	removeCompanyInit,
-	removeCompanyRequest,
-	editCompanyInit,
-	editCompanyRequest,
-	getCompaniesRequest,
-	getCompanyRequest,
+	createTaskInit,
+	createTaskRequest,
+	updateTaskInit,
+	updateTaskRequest,
+	deleteOneTaskInit,
+	deleteOneTaskRequest,
+	deleteMultipleTaskInit,
+	deleteMultipleTaskRequest,
+	getAllTasksInit,
+	getAllTasksRequest,
+	getTaskInit,
+	getTaskRequest,
 
-	addCompetitionInit,
-	addCompetitionRequest,
-	editCompetitionInit,
-	editCompetitionRequest,
-	getCompetitionRequest,
+	createListInit,
+	createListRequest,
+	updateListInit,
+	updateListRequest,
+	deleteOneListInit,
+	deleteOneListRequest,
+	getAllListsInit,
+	getAllListsRequest,
+	getListInit,
+	getListRequest
+} from './bugtracker.js';
 
-	addCategoryInit,
-	addCategoryRequest,
-	editCategoryInit,
-	editCategoryRequest,
-	getCategoryRequest,
-
-	addContestantInit,
-	addContestantRequest,
-	editContestantInit,
-	editContestantRequest,
-	getContestantRequest,
-	voteContestantRequest
-} from './company.js';
-
+export {
+	loginInit,
+	loginRequest,
+	signupInit,
+	signupRequest,
+	authenticateTokenRequest,
+	updateNameInit,
+	updateNameRequest,
+	logoutTimer,
+	checkUserAvaIlability
+} from './user.js';

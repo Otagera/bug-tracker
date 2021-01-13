@@ -22,7 +22,7 @@ export default class EditableContainer extends React.Component {
 
   handleDoubleClick (e) {
     // cancel previous callback
-    if (this.timeout) clearTimeout(this.timeout)
+    if (this.timeout) clearTimeout(this.timeout);
 
     // increment count
     this.count++;

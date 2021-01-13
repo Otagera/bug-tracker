@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 import swal from '@sweetalert/with-react';
 
@@ -8,7 +9,7 @@ import InputGroup from '../../UI/InputGroup/InputGroup';
 import Button from '../../UI/Button/Button';
 import Loader from '../../UI/Loader/Loader';
 import FormValidation from '../../../services/FormValidation';
-import AuthService from '../../../services/AuthService';
+import * as actions from '../../../store/actions/index';
 
 class EnterName extends Component {
 	state={
@@ -35,6 +36,14 @@ class EnterName extends Component {
 	componentWillUnmount () {
 		if (this.timeout) clearTimeout(this.timeout);
 	}
+    static getDerivedStateFromProps(props, state){
+        if(props.successfull){
+            return { submitClicked: false };
+        }else if(props.errorMsg){
+            return { submitClicked: false, errorMsg: props.errorMsg };
+        }
+        return { errorMsg: '' };
+    }
 	handleInputValue = (value, name)=>{
 		let formData = { ...this.state.formData };
 		formData[name].value = value;
@@ -54,13 +63,14 @@ class EnterName extends Component {
     	let fd = JSON.stringify({
 		    		name: this.state.formData.name.value
 		    	});
-        AuthService.updateName(fd).then(response=>{
-			this.timeout = setTimeout(()=>{
-		    	this.handleContinue();
-			}, 2500);
+    	this.props.onSubmitName(fd);
+		this.timeout = setTimeout(()=>{
+	    	this.handleContinue();
+		}, 2500);
+        /*AuthService.updateName(fd).then(response=>{
         }, error=>{
     		this.setState({ error: true });
-        });
+        });*/
     }
 	handleContinue = () =>{
 		swal({
@@ -128,4 +138,16 @@ class EnterName extends Component {
 		);
 	}
 }
-export default EnterName;
+const mapStateToProps = state =>{
+	return {
+        successfull: state.user.loginSuccess,
+        errorMsg: state.user.errorMsg
+	};
+}
+const mapDispatchToProps = dispatch =>{
+    return {
+        onInit: ()=>dispatch(actions.updateNameInit()),
+        onSubmitName: (user)=>dispatch(actions.updateNameRequest(user))
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(EnterName);

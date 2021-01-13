@@ -9,6 +9,7 @@ import './index.css';
 import App from './containers/App/App';
 import reportWebVitals from './reportWebVitals';
 import bugTrackerReducer from './store/reducers/bugtracker';
+import userReducer from './store/reducers/user';
 
 axios.defaults.baseURL = 'https://work.processwith.com';
 //axios.defaults.headers.common['Autorization'] = 'AUTH TOKEN';
@@ -31,7 +32,8 @@ axios.interceptors.response.use(response=>{
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
-	company: bugTrackerReducer
+	bugtracker: bugTrackerReducer,
+	user: userReducer,
 });
 
 const logger = store => {

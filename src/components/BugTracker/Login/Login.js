@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import swal from '@sweetalert/with-react';
 
@@ -8,7 +9,7 @@ import Button from '../../UI/Button/Button';
 import Loader from '../../UI/Loader/Loader';
 import Logo from '../../UI/Logo/Logo';
 import FormValidation from '../../../services/FormValidation';
-import AuthService from '../../../services/AuthService';
+import * as actions from '../../../store/actions/index';
 
 class Login extends Component{
 	state={
@@ -33,15 +34,24 @@ class Login extends Component{
 		showLoader: false,
 		redirect: false
 	}
-
+    componentDidMount(){
+        this.props.onInit();
+    }
 	componentWillUnmount () {
-		// cancel click callback
 		if (this.timeout) clearTimeout(this.timeout);
 	}
+    static getDerivedStateFromProps(props, state){
+        if(props.successfull){
+            return { submitClicked: false };
+        }else if(props.errorMsg){
+            return { submitClicked: false, errorMsg: props.errorMsg };
+        }
+        return { errorMsg: '' };
+    }
 	handleInputValue = (value, name)=>{
 		let formData = { ...this.state.formData };
 		formData[name].value = value;
-		formData[name].valid = FormValidation.checkValidity(formData[name].value, formData[name].validation, formData.password.value);
+		formData[name].valid = FormValidation.checkValidity(formData[name].value, formData[name].validation);
 		formData[name].touched = true;
 
 		let formIsValid = true;
@@ -57,29 +67,31 @@ class Login extends Component{
     	let fd = JSON.stringify({
 		    		email: this.state.formData.email.value
 		    	});
-        AuthService.login(fd).then(response=>{
-        	console.log(response);
-			this.timeout = setTimeout(()=>{
-		    	this.handleContinue();
-			}, 500);
-        }, error=>{
-    		this.setState({ error: true });
-        });
+    	this.props.onSubmitLogin(fd);
+		this.timeout = setTimeout(()=>{
+	    	this.handleSuccessfulContinue();
+		}, 2500);
     }
-	handleContinue = () =>{
+	handleSuccessfulContinue = () =>{
+		let icon = 'success';
+		if(this.props.errorMsg){
+			icon = 'error';
+		}
 		swal({
 			text: 'Login',
-			icon: 'success',
+			icon: icon,
 			content:(
-				<div>
-					<Logo className={styles.Logo} withOutLink={true} />
-					<h2>Login Successfull</h2>
-					<p>A special link has been sent to your email.</p>
-				</div>
+				<div> <p>
+					{(this.props.errorMsg)? this.props.errorMsg:
+						`Click on the special link sent to your ${this.state.formData.email.value}.`
+					}
+				</p> </div>
 			)
 		}).then(ok=>{
 			if(ok){
 				this.setState({ redirect: true, showLoader: false});
+			}else{
+				this.setState({ showLoader: false});
 			}
 		});
 	}
@@ -135,4 +147,16 @@ class Login extends Component{
 		);
 	}
 }
-export default Login;
+const mapStateToProps = state =>{
+	return {
+        successfull: state.user.loginSuccess,
+        errorMsg: state.user.errorMsg
+	};
+}
+const mapDispatchToProps = dispatch =>{
+    return {
+        onInit: ()=>dispatch(actions.loginInit()),
+        onSubmitLogin: (user)=>dispatch(actions.loginRequest(user))
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

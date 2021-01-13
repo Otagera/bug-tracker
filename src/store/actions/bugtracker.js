@@ -1,390 +1,343 @@
 import * as actionTypes from './actionTypes';
 import UserService from '../../services/UserService';
 
-//Company
-export const addCompanyInit = () =>{
+//Tasks
+export const createTaskInit = () =>{
 	return {
-		type: actionTypes.ADD_COMPANY_INIT
+		type: actionTypes.CREATE_TASK_INIT
 	};
 }
-const addCompany = success =>{
+const createTask = success =>{
 	return {
-		type: actionTypes.ADD_COMPANY,
+		type: actionTypes.CREATE_TASK,
 		success: success
 	};
 }
-export const addCompanyRequest = companyData =>{
+export const createTaskRequest = taskData =>{
 	return dispatch =>{
-		UserService.postCompany(companyData)
+		UserService.createTask(taskData)
 			.then(response=>{
-				if(response.status === 201) { dispatch(addCompany(true)); }
-			}).catch(err=>{console.log(err); dispatch(addCompany(false))});
-	}
-}
-
-export const removeCompanyInit = () =>{
-	return {
-		type: actionTypes.REMOVE_COMPANY_INIT
-	};
-}
-const removeCompany = success =>{
-	return {
-		type: actionTypes.REMOVE_COMPANY,
-		success: success
-	};
-}
-export const removeCompanyRequest = (fakeId) =>{
-	return dispatch =>{
-		UserService.deleteCompany(fakeId)
-			.then(response=>{
-				if(response.status === 200) { dispatch(removeCompany(true)); }
-			}).catch(err=>{console.log(err); dispatch(removeCompany(false))});
-	}
-}
-
-export const editCompanyInit = () =>{
-	return {
-		type: actionTypes.EDIT_COMPANY_INIT
-	};
-}
-const editCompany = success =>{
-	return {
-		type: actionTypes.EDIT_COMPANY,
-		success: success
-	};
-}
-export const editCompanyRequest = (fakeId, companyData) =>{
-	return dispatch =>{
-		UserService.putCompany(fakeId, companyData)
-			.then(response=>{
-				if(response.status === 200) { dispatch(editCompany(true)); }
-			}).catch(err=>{console.log(err); dispatch(editCompany(false))});
-	}
-}
-
-const getCompanies = companies =>{
-	return {
-		type: actionTypes.GET_COMPANIES,
-		companies: companies
-	};
-}
-export const getCompaniesRequest = () =>{
-	return dispatch => {
-		UserService.getCompanies()
-			.then(companyResponse=>{
-            	let companies = companyResponse.data.companies;
-            	let promises = [];
-                companies.forEach((company)=>{
-                    company.img = UserService.updateImgURL(company.img);
-                    promises.push(
-                    	new Promise((resolve, reject)=>{
-		                    UserService.getCompetitions(company.fakeId)
-			                    .then(competResponse=>{
-			                    	company.competitions = competResponse.data.competitions;
-			                    	resolve('Success');
-			                    }).catch(err=>{console.log(err); reject('Failed');});                    		
-                    	})
-                    );
-                });
-                Promise.all(promises).then(()=>{
-					dispatch(getCompanies(companies));                	
-                });
-			}).catch(err=>console.log(err));
-	};
-}
-
-const getCompany = company =>{
-	return {
-		type: actionTypes.GET_COMPANY,
-		company: company
-	};
-}
-export const getCompanyRequest = fakeId =>{
-	return dispatch =>{
-		new Promise((resolve, reject)=>{
-			UserService.getCompany(fakeId)
-				.then(response=>{
-	            	let company = response.data.company;
-	                company.img = UserService.updateImgURL(company.img);
-	                resolve(company);
-				}).catch(err=>reject(err));
-		}).then(company=>{
-			return new Promise((resolve, reject)=>{
-				UserService.getCompetitions(company.fakeId)
-	                .then(competResponse=>{
-	                	company.competitions = competResponse.data.competitions;
-	                	resolve(company);
-	                }).catch(err=>reject(err));
-			});
-		}).then(company=>{
-			return new Promise((resolve, reject)=>{
-				let promises = [];
-				for(let i = 0; i < company.competitions.length; i++){
-					promises.push(new Promise((resolve, reject)=>{
-			            UserService.getCategories(company.competitions[i].fakeId).then(catResponse=>{
-							company.competitions[i].categories = catResponse.data.categories;
-							resolve('Success');
-			    		}).catch(err=>reject(err));
-					}));
+				console.log(response);
+				if(false){
+					if(response.status === 201) { dispatch(createTask(true)); }					
 				}
-				Promise.all(promises).then(()=>{
-			    	resolve(company);
-				});
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(createTask(false));					
+				}
 			});
-		}).then(company=>{
-			dispatch(getCompany(company));
-		}).catch(err=>{
-			console.log(err);
-		});
-	};
-}
-
-
-//Competition
-export const addCompetitionInit = () =>{
-	return {
-		type: actionTypes.ADD_COMPETITION_INIT
-	};
-}
-const addCompetition = success =>{
-	return {
-		type: actionTypes.ADD_COMPETITION,
-		success: success
-	};
-}
-export const addCompetitionRequest = competitionData =>{
-	return dispatch =>{
-		UserService.postCompetition(competitionData)
-			.then(response=>{
-				if(response.status === 201){ dispatch(addCompetition(true)); }
-			}).catch(err=>{console.log(err); dispatch(addCompetition(false)); });
 	}
 }
 
-export const editCompetitionInit = () =>{
+export const updateTaskInit = () =>{
 	return {
-		type: actionTypes.EDIT_COMPETITION_INIT
+		type: actionTypes.UPDATE_TASK_INIT
 	};
 }
-const editCompetition = success =>{
+const updateTask = success =>{
 	return {
-		type: actionTypes.EDIT_COMPETITION,
+		type: actionTypes.UPDATE_TASK,
 		success: success
 	};
 }
-export const editCompetitionRequest = (fakeId, competitionData) =>{
+export const updateTaskRequest = taskData =>{
 	return dispatch =>{
-		UserService.putCompetition(fakeId, competitionData)
+		UserService.updateTask(taskData)
 			.then(response=>{
-				if(response.status === 200) { dispatch(editCompetition(true)); }
-			}).catch(err=>{console.log(err); dispatch(editCompetition(false))});
-	}
-}
-
-const getCompetition = (company, competition) =>{
-	return {
-		type: actionTypes.GET_COMPETITION,
-		company: company,
-		competition: competition
-	};
-}
-export const getCompetitionRequest = (companyFakeId, competitionFakeId) =>{
-	return dispatch =>{
-		new Promise((resolve, reject)=>{
-			UserService.getCompetition(competitionFakeId)
-				.then(response=>{
-					let competition = response.data.competition;
-					resolve(competition)
-				}).catch(err=>reject(err));
-		}).then(competition=>{
-			return new Promise((resolve, reject)=>{
-	            UserService.getCategories(competition.fakeId).then(catResponse=>{
-					competition.categories = catResponse.data.categories;
-					resolve(competition);
-	    		}).catch(err=>reject(err));
+				console.log(response);
+				if(false){
+					if(response.status === 201) { dispatch(updateTask(true)); }					
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(updateTask(false));					
+				}
 			});
-		}).then(competition=>{
-			return new Promise((resolve, reject)=>{
-				UserService.getCompany(companyFakeId)
-					.then(response=>{
-		            	let company = response.data.company;
-		                company.img = UserService.updateImgURL(company.img);
-		                resolve([company, competition]);
-					}).catch(err=>reject(err));
+	}
+}
+
+export const deleteOneTaskInit = () =>{
+	return {
+		type: actionTypes.DELETE_ONE_TASK_INIT
+	};
+}
+const deleteOneTask = success =>{
+	return {
+		type: actionTypes.DELETE_ONE_TASK,
+		success: success
+	};
+}
+export const deleteOneTaskRequest = (idData) =>{
+	return dispatch =>{
+		UserService.deleteOneTask(idData)
+			.then(response=>{
+				console.log(response);
+				if(false){
+					if(response.status === 200) { dispatch(deleteOneTask(true)); }					
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(deleteOneTask(false));					
+				}
 			});
-		}).then(([company, competition])=>{
-			dispatch(getCompetition(company, competition));
-		}).catch(err=>{
-			console.log(err);
-		});
-	};
-}
-
-
-//Category
-export const addCategoryInit = () =>{
-	return {
-		type: actionTypes.ADD_CATEGORY_INIT
-	};
-}
-const addCategory = success =>{
-	return {
-		type: actionTypes.ADD_CATEGORY,
-		success: success
-	};
-}
-export const addCategoryRequest = categoryData =>{
-	return dispatch =>{
-		UserService.postCategory(categoryData)
-			.then(response=>{
-				if(response.status === 201){ dispatch(addCategory(true)); }
-			}).catch(err=>{console.log(err); dispatch(addCategory(false)); });
 	}
 }
 
-export const editCategoryInit = () =>{
+export const deleteMultipleTaskInit = () =>{
 	return {
-		type: actionTypes.EDIT_CATEGORY_INIT
+		type: actionTypes.DELETE_MULTIPLE_TASK_INIT
 	};
 }
-const editCategory = success =>{
+const deleteMultipleTask = success =>{
 	return {
-		type: actionTypes.EDIT_CATEGORY,
+		type: actionTypes.DELETE_MULTIPLE_TASK,
 		success: success
 	};
 }
-export const editCategoryRequest = (fakeId, categoryData) =>{
+export const deleteMultipleTaskRequest = (idsData) =>{
 	return dispatch =>{
-		UserService.putCategory(fakeId, categoryData)
+		UserService.deleteMultipleTask(idsData)
 			.then(response=>{
-				if(response.status === 200) { dispatch(editCategory(true)); }
-			}).catch(err=>{console.log(err); dispatch(editCategory(false))});
-	}
-}
-
-const getCategory = (company, competition, category) =>{
-	return {
-		type: actionTypes.GET_CATEGORY,
-		company: company,
-		competition: competition,
-		category: category
-	};
-}
-export const getCategoryRequest = (companyFakeId, competitionFakeId, categoryFakeId) =>{
-	return dispatch =>{
-		new Promise((resolve, reject)=>{
-			UserService.getCompetition(competitionFakeId)
-				.then(response=>{
-					let competition = response.data.competition;
-					resolve(competition)
-				}).catch(err=>reject(err));
-		}).then(competition=>{
-			return new Promise((resolve, reject)=>{
-	            UserService.getCategories(competition.fakeId).then(catResponse=>{
-					competition.categories = catResponse.data.categories;
-					resolve(competition);
-	    		}).catch(err=>reject(err));
+				console.log(response);
+				if(false){
+					if(response.status === 200) { dispatch(deleteMultipleTask(true)); }					
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(deleteMultipleTask(false));					
+				}
 			});
-		}).then(competition=>{
-			return new Promise((resolve, reject)=>{
-				UserService.getCompany(companyFakeId)
-					.then(response=>{
-		            	let company = response.data.company;
-		                company.img = UserService.updateImgURL(company.img);
-		                resolve([company, competition]);
-					}).catch(err=>reject(err));
+	}
+}
+
+export const getAllTasksInit = () =>{
+	return {
+		type: actionTypes.GET_ALL_TASKS_INIT
+	};
+}
+const getAllTasks = tasks =>{
+	return {
+		type: actionTypes.GET_ALL_TASKS,
+		tasks: tasks
+	};
+}
+export const getAllTasksRequest = () =>{
+	return dispatch =>{
+		UserService.getAllTasks()
+			.then(response=>{
+				//console.log(response);
+				if(response.data.status){
+					dispatch(getAllTasks(response.data.data.tasks));
+				}
+				if(false){
+					if(response.status === 200) { dispatch((true)); }					
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(getAllTasks(null));					
+				}
 			});
-		}).then(([company, competition])=>{
-			return new Promise((resolve, reject)=>{
-				UserService.getCategory(categoryFakeId)
-					.then(response=>{
-						let category = response.data.category;
-						resolve([company, competition, category]);
-					}).catch(err=>reject(err));
-			})
-		}).then(([company, competition, category])=>{
-			dispatch(getCategory(company, competition, category));
-		}).catch(err=>{
-			console.log(err);
-		});
-	};
-}
-
-//Contestant
-export const addContestantInit = () =>{
-	return {
-		type: actionTypes.ADD_CONTESTANT_INIT
-	};
-}
-const addContestant = success =>{
-	return {
-		type: actionTypes.ADD_CONTESTANT,
-		success: success
-	};
-}
-export const addContestantRequest = (categoryFakeId, contestantData) =>{
-	return dispatch =>{
-		UserService.postContestant(categoryFakeId, contestantData)
-			.then(response=>{
-				if(response.status === 200){ dispatch(addContestant(true)); }
-			}).catch(err=>{console.log(err); dispatch(addContestant(false)); });
 	}
 }
 
-export const editContestantInit = () =>{
+export const getTaskInit = () =>{
 	return {
-		type: actionTypes.EDIT_CONTESTANT_INIT
+		type: actionTypes.GET_TASK_INIT
 	};
 }
-const editContestant = success =>{
+const getTask = task =>{
 	return {
-		type: actionTypes.EDIT_CONTESTANT,
-		success: success
+		type: actionTypes.GET_TASK,
+		task: task
 	};
 }
-export const editContestantRequest = (categoryFakeId, contestantFakeId, categoryData) =>{
+export const getTaskRequest = () =>{
 	return dispatch =>{
-		UserService.putContestant(categoryFakeId, contestantFakeId, categoryData)
+		UserService.getTask()
 			.then(response=>{
-				if(response.status === 201) { dispatch(editContestant(true)); }
-			}).catch(err=>{console.log(err); dispatch(editContestant(false))});
+				console.log(response);
+				if(false){
+					if(response.status === 200) { dispatch(getTask(true)); }					
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(getTask(false));					
+				}
+			});
 	}
 }
 
-const getContestant = contestant =>{
+//Lists
+export const createListInit = () =>{
 	return {
-		type: actionTypes.GET_CONTESTANT,
-		contestant: contestant
+		type: actionTypes.CREATE_LIST_INIT
 	};
 }
-export const getContestantRequest = (categoryFakeId, contestantFakeId) =>{
-	return dispatch =>{
-		new Promise((resolve, reject)=>{
-			UserService.getContestant(categoryFakeId, contestantFakeId)
-				.then(response=>{
-					let contestant = response.data.contestant;
-	                contestant.img = UserService.updateImgURL(contestant.img);
-					resolve(contestant);
-				}).catch(err=>reject(err));
-		}).then(contestant=>{
-			dispatch(getContestant(contestant));
-		}).catch(err=>{
-			console.log(err);
-		});
-	};
-}
-
-const voteContestant = success =>{
+const createList = success =>{
 	return {
-		type: actionTypes.VOTE_CONTESTANT,
+		type: actionTypes.CREATE_LIST,
 		success: success
 	};
 }
-export const voteContestantRequest = (categoryFakeId, contestantFakeId) =>{
+export const createListRequest = taskData =>{
 	return dispatch =>{
-		UserService.voteContestant(categoryFakeId, contestantFakeId)
+		UserService.createList(taskData)
 			.then(response=>{
-				if(response.status === 201) { dispatch(voteContestant(true)); }
-			}).catch(err=>{console.log(err); dispatch(voteContestant(false))});
+				console.log(response);
+				if(false){
+					if(response.status === 201) { dispatch(createList(true)); }					
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(createList(false));					
+				}
+			});
+	}
+}
+
+export const updateListInit = () =>{
+	return {
+		type: actionTypes.UPDATE_LIST_INIT
+	};
+}
+const updateList = success =>{
+	return {
+		type: actionTypes.UPDATE_LIST,
+		success: success
+	};
+}
+export const updateListRequest = taskData =>{
+	return dispatch =>{
+		UserService.updateList(taskData)
+			.then(response=>{
+				console.log(response);
+				if(false){
+					if(response.status === 201) { dispatch(updateList(true)); }					
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(updateList(false));					
+				}
+			});
+	}
+}
+
+export const deleteOneListInit = () =>{
+	return {
+		type: actionTypes.DELETE_ONE_LIST_INIT
+	};
+}
+const deleteOneList = success =>{
+	return {
+		type: actionTypes.DELETE_ONE_LIST,
+		success: success
+	};
+}
+export const deleteOneListRequest = (idData) =>{
+	return dispatch =>{
+		UserService.deleteOneList(idData)
+			.then(response=>{
+				console.log(response);
+				if(false){
+					if(response.status === 200) { dispatch(deleteOneList(true)); }					
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(deleteOneList(false));					
+				}
+			});
+	}
+}
+/*
+export const deleteMultipleTaskInit = () =>{
+	return {
+		type: actionTypes.DELETE_MULTIPLE_TASK_INIT
+	};
+}
+const deleteMultipleTask = success =>{
+	return {
+		type: actionTypes.DELETE_MULTIPLE_TASK,
+		success: success
+	};
+}
+export const deleteMultipleTaskRequest = (idsData) =>{
+	return dispatch =>{
+		UserService.deleteMultipleTask(idsData)
+			.then(response=>{
+				console.log(response);
+				if(false){
+					if(response.status === 200) { dispatch(deleteMultipleTask(true)); }					
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(deleteMultipleTask(false));					
+				}
+			});
+	}
+}
+*/
+export const getAllListsInit = () =>{
+	return {
+		type: actionTypes.GET_ALL_LISTS_INIT
+	};
+}
+const getAllLists = lists =>{
+	return {
+		type: actionTypes.GET_ALL_LISTS,
+		lists: lists
+	};
+}
+export const getAllListsRequest = () =>{
+	return dispatch =>{
+		UserService.getAllLists()
+			.then(response=>{
+				//console.log(response);
+				if(response.data.status){
+					dispatch(getAllLists(response.data.data.lists));
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(getAllLists(null));					
+				}
+			});
+	}
+}
+
+export const getListInit = () =>{
+	return {
+		type: actionTypes.GET_LIST_INIT
+	};
+}
+const getList = success =>{
+	return {
+		type: actionTypes.GET_LIST,
+		success: success
+	};
+}
+export const getListRequest = () =>{
+	return dispatch =>{
+		UserService.getList()
+			.then(response=>{
+				console.log(response);
+				if(false){
+					if(response.status === 200) { dispatch(getList(true)); }					
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(false){
+					dispatch(getList(false));					
+				}
+			});
 	}
 }

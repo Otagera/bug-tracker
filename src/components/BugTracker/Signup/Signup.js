@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import swal from '@sweetalert/with-react';
 
@@ -8,7 +9,7 @@ import Button from '../../UI/Button/Button';
 import Loader from '../../UI/Loader/Loader';
 import Logo from '../../UI/Logo/Logo';
 import FormValidation from '../../../services/FormValidation';
-import AuthService from '../../../services/AuthService';
+import * as actions from '../../../store/actions/index';
 
 class Signup extends Component{
 	state={
@@ -33,11 +34,20 @@ class Signup extends Component{
 		showLoader: false,
 		redirect: false
 	}
-
+    componentDidMount(){
+        this.props.onInit();
+    }
 	componentWillUnmount () {
-		// cancel click callback
 		if (this.timeout) clearTimeout(this.timeout);
 	}
+    static getDerivedStateFromProps(props, state){
+        if(props.successfull){
+            return { submitClicked: false };
+        }else if(props.errorMsg){
+            return { submitClicked: false, errorMsg: props.errorMsg };
+        }
+        return { errorMsg: '' };
+    }
 	handleInputValue = (value, name)=>{
 		let formData = { ...this.state.formData };
 		formData[name].value = value;
@@ -57,24 +67,26 @@ class Signup extends Component{
     	let fd = JSON.stringify({
 		    		email: this.state.formData.email.value
 		    	});
-        AuthService.signup(fd).then(response=>{
-        	console.log(response);
-	    	this.timeout = setTimeout(()=>{
-		    	this.handleContinue();	    		
-	    	}, 500);
-        }, error=>{
-    		this.setState({ error: true });
-        });
+    	this.props.onSubmitSignup(fd);
+    	this.timeout = setTimeout(()=>{
+	    	this.handleContinue();
+    	}, 2500);
     }
 	handleContinue = () =>{
+		let icon = 'success';
+		if(this.props.errorMsg){
+			icon = 'error';
+		}
 		swal({
 			text: 'Signup ',
-			icon: 'success',
+			icon: icon,
 			content:(
 				<div>
-					<Logo className={styles.Logo} withOutLink={true}/>
-					<h2>Signup Successfull</h2>
-					<p>A special link has been sent to your email.</p>
+					<p>
+						{(this.props.errorMsg)? this.props.errorMsg:
+							`Click on the special link sent to your ${this.state.formData.email.value}.`
+						}
+					</p>
 				</div>
 			)
 		}).then(ok=>{
@@ -135,4 +147,16 @@ class Signup extends Component{
 		);
 	}
 }
-export default Signup;
+const mapStateToProps = state =>{
+	return {
+        successfull: state.user.loginSuccess,
+        errorMsg: state.user.errorMsg
+	};
+}
+const mapDispatchToProps = dispatch =>{
+    return {
+        onInit: ()=>dispatch(actions.signupInit()),
+        onSubmitSignup: (user)=>dispatch(actions.signupRequest(user))
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

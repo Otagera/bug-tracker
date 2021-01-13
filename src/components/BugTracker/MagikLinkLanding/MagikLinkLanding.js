@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Redirect, withRouter } from 'react-router-dom';
 
 import Logo from '../../UI/Logo/Logo';
 import Loader from '../../UI/Loader/Loader';
-import AuthService from '../../../services/AuthService';
+import * as actions from '../../../store/actions/index';
 
 class MagikLinkLanding extends Component {
 	state = {
@@ -12,27 +13,20 @@ class MagikLinkLanding extends Component {
 		errorMsg: ''
 	}
 	componentDidMount(){
-		//5feb038fb3f7d7460600ffa7af2d944248d52a1d0cf02
 		this.setState({ showLoader: true });
 		let fd = JSON.stringify({
 			token: this.props.match.params.token
 		});
-		AuthService.authenticateToken(fd).then(response=>{
-			if(response.data.data && response.data.data.type === 'signup'){
-				this.setState({ showLoader: false, redirectPath: '/signup/enter-name' });
-			}else if(response.data.data && response.data.data.type === 'login'){
-				this.setState({ showLoader: false, redirectPath: '/get-started' });
-			}else if(response.data.code === 401){
-				this.setState({
-					showLoader: false,
-					error: true,
-					errorMsg: 'Sorry token has expired'
-				})
-			}
-		}, error=>{
-			this.setState({ error: true, errorMsg: error });
-		})
+		this.props.onSubmitLink(fd);
 	}
+    static getDerivedStateFromProps(props, state){
+        if(props.successfull){
+            return { redirectPath: props.redirectPath };
+        }else if(props.errorMsg){
+            return { showLoader: false, errorMsg: props.errorMsg, error: true };
+        }
+        return { errorMsg: '' };
+    }
 	render(){
 		const { showLoader, error, errorMsg, redirectPath } = this.state;
 		let redirecter = null;
@@ -51,4 +45,17 @@ class MagikLinkLanding extends Component {
 		);
 	}
 }
-export default withRouter(MagikLinkLanding);
+const mapStateToProps = state =>{
+	return {
+        successfull: state.user.authTokenSuccess,
+        redirectPath: state.user.redirectPath,
+        errorMsg: state.user.errorMsg
+	};
+}
+const mapDispatchToProps = dispatch =>{
+    return {
+        //onInit: ()=>dispatch(actions.updateNameInit()),
+        onSubmitLink: (user)=>dispatch(actions.authenticateTokenRequest(user))
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MagikLinkLanding));
