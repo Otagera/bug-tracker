@@ -96,13 +96,24 @@
 		height: 80%;
 	}
 	.Lists_ul_li{
-		height: 45px;
-		grid-template-columns: 0.45fr 0.35fr 0.25fr;
+		height: 65px;
+		grid-template-columns: 0.7fr 0.3fr;
+		grid-template-rows: 0.5fr 0.5fr;
+		border-bottom: 0.5px solid slateblue;
 	}
 	.Lists_ul_li_title{
-		padding: 20px 0;
+		padding: 0;
+		grid-row: 1 / 2;
+		grid-column: 1 / 2;
+	}
+	.Lists_ul_li_btns{
+		grid-row: 1 / 2;
+		grid-column: 2 / 3;
 	}
 	.Lists_ul_li_progress_container{
 		width: 70%;
+		margin: auto;
+		grid-row: 2 / 3;
+		grid-column: 1 / 3;
 	}
 }
