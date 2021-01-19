@@ -2,9 +2,9 @@
 	width: 90%;
 	margin: auto;
 	display: grid;
-	grid-template-rows: 0.3fr 1fr 0.2fr;
+	grid-template-rows: 0.15fr 1fr 0.2fr 0.35fr;
 }
-.Add{
+.Lists_Add_Btn{
 	grid-row: 4 / 5;
 	width: max-content;
 	margin: auto;
@@ -87,9 +87,8 @@
 }
 @media (max-width: 500px) {
 	.Lists{
-		margin: 50px auto;
-		grid-template-rows: 1fr 1fr 1fr;
-		height: 500px;
+		margin: 25px auto;
+		height: 100%;
 	}
 	.Lists input{
 		width: 85%;

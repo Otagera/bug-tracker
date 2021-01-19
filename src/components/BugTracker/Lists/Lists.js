@@ -153,7 +153,7 @@ class Lists extends Component {
                 <EditableContainer
                     doubleClick={false}
                     edit={true}
-                    handleEnter={this.addList}>
+                    handleEnter={this.addList} >
                 </EditableContainer>
             );
         }
@@ -162,7 +162,7 @@ class Lists extends Component {
 				<h2 className={styles.Header}>Lists</h2>
 				{listsToDisplay}
                 {addInput}
-                <div className={styles.Add}>
+                <div className={styles.Lists_Add_Btn}>
     				<Button buttonType='add' clicked={this.showAddListInput}></Button>                    
                 </div>
 			</div>
