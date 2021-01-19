@@ -14,6 +14,13 @@ export default class EditableContainer extends React.Component {
       value: ''
     }
   }
+  static getDerivedStateFromProps(props, state){
+      //console.log(props.lists);
+    if(props.edit){
+      return { edit: props.edit };
+    }
+    return null;
+  }
 
   componentWillUnmount () {
     // cancel click callback

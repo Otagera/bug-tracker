@@ -185,11 +185,11 @@ const createList = success =>{
 		success: success
 	};
 }
-export const createListRequest = taskData =>{
+export const createListRequest = listData =>{
 	return dispatch =>{
-		UserService.createList(taskData)
+		UserService.createList(listData)
 			.then(response=>{
-				console.log(response);
+				//console.log(response);
 				if(false){
 					if(response.status === 201) { dispatch(createList(true)); }					
 				}
@@ -213,11 +213,11 @@ const updateList = success =>{
 		success: success
 	};
 }
-export const updateListRequest = taskData =>{
+export const updateListRequest = listData =>{
 	return dispatch =>{
-		UserService.updateList(taskData)
+		UserService.updateList(listData)
 			.then(response=>{
-				console.log(response);
+				//console.log(response);
 				if(false){
 					if(response.status === 201) { dispatch(updateList(true)); }					
 				}
@@ -246,12 +246,12 @@ export const deleteOneListRequest = (idData) =>{
 		UserService.deleteOneList(idData)
 			.then(response=>{
 				console.log(response);
-				if(false){
+				if(response.data.status){
 					if(response.status === 200) { dispatch(deleteOneList(true)); }					
 				}
 			}).catch(err=>{
 				console.log(err);
-				if(false){
+				if(err){
 					dispatch(deleteOneList(false));					
 				}
 			});
@@ -286,7 +286,29 @@ export const deleteMultipleTaskRequest = (idsData) =>{
 	}
 }
 */
-export const getAllListsInit = () =>{
+const inviteUser = success=>{
+	return {
+		type: actionTypes.INVITE_USER,
+		success: success
+	}
+}
+export const inviteUserRequest = inviteData =>{
+	return dispatch =>{
+		UserService.inviteUser(inviteData)
+			.then(response=>{
+				console.log(response);
+				if(response.data.status){
+					dispatch(inviteUser(true));
+				}
+			}).catch(err=>{
+				console.log(err);
+				if(err){
+					dispatch(inviteUser(false));
+				}
+			});
+	}
+}
+export const getAllListsInit = list =>{
 	return {
 		type: actionTypes.GET_ALL_LISTS_INIT
 	};
@@ -307,7 +329,7 @@ export const getAllListsRequest = () =>{
 				}
 			}).catch(err=>{
 				console.log(err);
-				if(false){
+				if(err){
 					dispatch(getAllLists(null));					
 				}
 			});
@@ -319,24 +341,24 @@ export const getListInit = () =>{
 		type: actionTypes.GET_LIST_INIT
 	};
 }
-const getList = success =>{
+const getList = list =>{
 	return {
 		type: actionTypes.GET_LIST,
-		success: success
+		list: list
 	};
 }
-export const getListRequest = () =>{
+export const getListRequest = (listId) =>{
 	return dispatch =>{
-		UserService.getList()
+		UserService.getList(listId)
 			.then(response=>{
-				console.log(response);
-				if(false){
-					if(response.status === 200) { dispatch(getList(true)); }					
+				//console.log(response);
+				if(response.data.status){
+					if(response.status === 200) { dispatch(getList(response.data.data.list)); }					
 				}
 			}).catch(err=>{
 				console.log(err);
-				if(false){
-					dispatch(getList(false));					
+				if(err){
+					dispatch(getList(null));					
 				}
 			});
 	}

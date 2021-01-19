@@ -23,9 +23,12 @@ const button = ( props )=>{
 			break;
 		case 'addLink':
 			button =  <Link to={props.addLink.to}  className={styles.Add}>
-						<div onClick={clicked} className={styles.Add_Company}>
+						<div onClick={clicked} className={styles.Add_Div}>
 						</div>
 					  </Link>
+					  break;
+		case 'add':
+			button =  <div onClick={clicked} className={styles.Add_Div}></div>
 					  break;
 		default:
 			button = <button

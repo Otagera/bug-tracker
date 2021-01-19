@@ -38,6 +38,16 @@ const reducer = (state= initialState, action) => {
       return updateObject(state, { lists: [] });
     case actionTypes.GET_ALL_LISTS:
       return updateObject(state, { lists: action.lists});
+
+    case actionTypes.GET_LIST_INIT:
+      return updateObject(state, { list: null });
+    case actionTypes.GET_LIST:
+      return updateObject(state, { list: action.list});
+
+    case actionTypes.DELETE_ONE_LIST_INIT:
+      return updateObject(state, { deleteOneListSuccess: false });
+    case actionTypes.DELETE_ONE_LIST:
+      return updateObject(state, { deleteOneListSuccess: action.success });
     default:
 			return state;
 	}

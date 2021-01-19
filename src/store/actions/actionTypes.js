@@ -19,6 +19,7 @@ export const UPDATE_LIST_INIT = 'UPDATE_LIST_INIT';
 export const UPDATE_LIST = 'UPDATE_LIST';
 export const DELETE_ONE_LIST_INIT = 'DELETE_ONE_LIST_INIT';
 export const DELETE_ONE_LIST = 'DELETE_ONE_LIST';
+export const INVITE_USER = 'INVITE_USER';
 export const GET_ALL_LISTS_INIT = 'GET_ALL_LISTS_INIT';
 export const GET_ALL_LISTS = 'GET_ALL_LISTS';
 export const GET_LIST_INIT = 'GET_LIST_INIT';

@@ -15,7 +15,7 @@ import styles from './List.module.css';
 class List extends Component {
     state = {
     	list: {
-    		title: 'Bug Tracker'
+    		title: 'Title'
     	},
     	tasks: [/*
 			{
@@ -38,11 +38,16 @@ class List extends Component {
     }
     componentDidMount(){
         this.props.onInit();
+        this.props.onList(this.props.match.params.listId);
     }
     static getDerivedStateFromProps(props, state){
-        //console.log(props.tasks);
+        //console.log(props.list);
         if(props.tasks && props.tasks.length > 0 && props.tasks !== state.tasks){
-            return { tasks: props.tasks.filter(task=>task.parent === props.match.params.listId) };
+	        if(props.list){
+	        	return { list: props.list, tasks: props.tasks.filter(task=>task.parent === props.match.params.listId) };
+	        }else{
+	            return { tasks: props.tasks.filter(task=>task.parent === props.match.params.listId) };
+	        }
         }
         return null;
     }
@@ -163,12 +168,14 @@ class List extends Component {
 }
 const mapStateToProps = state =>{
     return {
-    	tasks: state.bugtracker.tasks
+    	tasks: state.bugtracker.tasks,
+    	list: state.bugtracker.list
     };
 }
 const mapDispatchToProps = dispatch =>{
     return {
     	onInit: ()=>dispatch(actions.getAllTasksRequest()),
+        onList: (listId)=>dispatch(actions.getListRequest(listId)),
         onAddTask: (taskData)=>dispatch(actions.createTaskRequest(taskData)),
         onUpdateTask: (taskData)=>dispatch(actions.updateTaskRequest(taskData))
     }

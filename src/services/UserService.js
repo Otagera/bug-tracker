@@ -96,6 +96,18 @@ class UserService {
 						headers: headersObj
 					});
     }
+    inviteUser(fd){
+    	let headersObj = {
+    		...AuthHeader(),
+    		'content-type': 'application/json'
+    	}
+    	return axios({
+    		method: 'post',
+    		url: '/user/lists/invite',
+    		data: fd,
+    		headers: headersObj
+    	})
+    }
 	getAllLists(){
 		return axios.get('/user/lists/all', { headers: AuthHeader() });
 	}

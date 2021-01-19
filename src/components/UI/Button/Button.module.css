@@ -11,11 +11,11 @@
 	padding: 10px 30px;
 	cursor: pointer;
 }
-.Add_Company:hover{
+.Add_Div:hover{
   transform: rotate(135deg) scale(1.12);
   z-index: 5;
 }
-.Add_Company{
+.Add_Div{
 	height: 50px;
 	width: 50px;
 	background-color: slateblue;

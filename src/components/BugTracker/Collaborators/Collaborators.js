@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import Aux from '../../../hoc/Auxillary/Auxillary';
 import styles from './Collaborators.module.css';
 import FormValidation from '../../../services/FormValidation';
 import InputGroup from '../../UI/InputGroup/InputGroup';
 import Button from '../../UI/Button/Button';
+import Loader from '../../UI/Loader/Loader';
+import * as actions from '../../../store/actions/index';
 
 class Collaborators extends Component {
     state = {
     	collaborators: [
-    		'ikwuje@gmail.com',
     		'jeremiah@gmail.com'
     	],
     	formData:{
@@ -29,12 +32,13 @@ class Collaborators extends Component {
 				valid: false,
 				touched: false
 			}
-		}
+		},
+		showLoader: false
     }
 	handleInputValue = (value, name)=>{
 		let formData = { ...this.state.formData };
 		formData[name].value = value;
-		formData[name].valid = FormValidation.checkValidity(formData[name].value, formData[name].validation, formData.password.value);
+		formData[name].valid = FormValidation.checkValidity(formData[name].value, formData[name].validation);
 		formData[name].touched = true;
 
 		let formIsValid = true;
@@ -50,8 +54,24 @@ class Collaborators extends Component {
 		console.log(tempCollabs);
 		this.setState({ collaborators: tempCollabs });
 	}
+	addItem = (value) =>{
+		const tempcollaborators = [...this.state.collaborators ];
+		tempcollaborators.push(value);
+		this.setState({ collaborators: tempcollaborators, showLoader: false });
+		this.props.onInvite(JSON.stringify({
+			id: this.props.match.params.listId,
+			email: value
+		}));
+	}
+    handleSubmit = (e)=>{
+    	e.preventDefault();
+		this.setState({ showLoader: true });
+    	this.timeout = setTimeout(()=>{
+	    	this.addItem(this.state.formData.email.value);
+    	}, 2500);
+    }
 	render(){
-		const { collaborators, formData } = this.state;
+		const { collaborators, formData, showLoader } = this.state;
 		let formElementArray = [];
 		for(let key in formData){
 			formElementArray.push({
@@ -104,11 +124,25 @@ class Collaborators extends Component {
 							)}
 						)
 					}</div>
-					<Button>Add</Button>
+					<Button
+					 	clicked={this.handleSubmit}
+					 	enable={!showLoader} >
+						{(showLoader)?
+							<Loader width={`20`} />:
+							`Add`}
+					</Button>
 				</div>
 				{collabToDisplay}
 			</div>
 		);
 	}
 }
-export default Collaborators;
+const mapStateToProps = state =>{
+	return {};
+}
+const mapDispatchToProps = dispatch =>{
+	return {
+		onInvite: (inviteData)=>dispatch(actions.inviteUserRequest(inviteData))
+	}
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Collaborators));

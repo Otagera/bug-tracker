@@ -18,6 +18,7 @@ export {
 	updateListRequest,
 	deleteOneListInit,
 	deleteOneListRequest,
+	inviteUserRequest,
 	getAllListsInit,
 	getAllListsRequest,
 	getListInit,
