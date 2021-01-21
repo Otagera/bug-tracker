@@ -18,8 +18,9 @@ export const createTaskRequest = taskData =>{
 		UserService.createTask(taskData)
 			.then(response=>{
 				//console.log(response);
-				if(false){
-					if(response.status === 201) { dispatch(createTask(true)); }					
+				if(response.data.status){
+					dispatch(createTask(true));
+					dispatch(getAllTasksRequest());
 				}
 			}).catch(err=>{
 				console.log(err);

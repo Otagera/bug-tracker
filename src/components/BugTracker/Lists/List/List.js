@@ -36,11 +36,11 @@ class List extends Component {
     	showModal: false
     }
     componentDidMount(){
-        this.props.onInit();
+        this.props.onGetTasks();
         this.props.onList(this.props.match.params.listId);
     }
     static getDerivedStateFromProps(props, state){
-        //console.log(props.list);
+        //console.log(props.list);#
         if(props.tasks && props.tasks.length > 0){
 	        if(props.list){
 	        	return { list: props.list, tasks: props.tasks.filter(task=>task.parent === props.match.params.listId) };
@@ -84,8 +84,6 @@ class List extends Component {
 			title: value,
 			parent: this.props.match.params.listId
 		}));
-        this.props.onInit();
-        this.props.onList(this.props.match.params.listId);
 	}
 	render(){
 		const { list, tasks, showModal } = this.state;
@@ -165,12 +163,14 @@ class List extends Component {
 const mapStateToProps = state =>{
     return {
     	tasks: state.bugtracker.tasks,
-    	list: state.bugtracker.list
+    	list: state.bugtracker.list,
+    	createTaskSuccess: state.bugtracker.createTaskSuccess
     };
 }
 const mapDispatchToProps = dispatch =>{
     return {
     	onInit: ()=>dispatch(actions.getAllTasksRequest()),
+    	onGetTasks: ()=>dispatch(actions.createTaskInit()),
         onList: (listId)=>dispatch(actions.getListRequest(listId)),
         onAddTask: (taskData)=>dispatch(actions.createTaskRequest(taskData)),
         onUpdateTask: (taskData)=>dispatch(actions.updateTaskRequest(taskData))
