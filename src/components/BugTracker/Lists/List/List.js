@@ -6,7 +6,6 @@ import { faCheck, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 import Aux from '../../../../hoc/Auxillary/Auxillary';
 import Collaborators from '../../Collaborators/Collaborators';
-import Button from '../../../UI/Button/Button';
 import Modal from '../../../UI/Modal/Modal';
 import EditableContainer from '../../../UI/DoubleTapEdit/EditableContainer';
 import * as actions from '../../../../store/actions/index';
@@ -42,7 +41,7 @@ class List extends Component {
     }
     static getDerivedStateFromProps(props, state){
         //console.log(props.list);
-        if(props.tasks && props.tasks.length > 0 && props.tasks !== state.tasks){
+        if(props.tasks && props.tasks.length > 0){
 	        if(props.list){
 	        	return { list: props.list, tasks: props.tasks.filter(task=>task.parent === props.match.params.listId) };
 	        }else{
@@ -83,13 +82,13 @@ class List extends Component {
 		this.setState({ tasks: tempTasks });
 		this.props.onAddTask(JSON.stringify({
 			title: value,
-			parent: 0,
-			list: this.props.match.params.listId
+			parent: this.props.match.params.listId
 		}));
+        this.props.onInit();
+        this.props.onList(this.props.match.params.listId);
 	}
 	render(){
 		const { list, tasks, showModal } = this.state;
-        let getStarted = { to: '/list/new' };
 		let tasksToDisplay = null;
 		if(tasks && tasks.length < 1){
 			tasksToDisplay = (
@@ -154,9 +153,6 @@ class List extends Component {
 						  onClick={this.showModal}/>
 				</div>
 				{tasksToDisplay}
-                <div className={styles.Add}>
-    				<Button addLink={getStarted} buttonType='addLink'></Button>                    
-                </div>
 				<Modal
 					show={showModal}
 					modalClosed={this.removeModal}>

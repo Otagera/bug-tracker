@@ -43,6 +43,7 @@ class Lists extends Component {
                     let tempTasks = props.tasks.filter(task=>task.parent === tempLists[i].id);
                     let tempCompleted = 0;
                     tempTasks.forEach((task)=>{
+                        task.status = '1';
                         if(task.status === '1'){ tempCompleted += 1; }
                     });
                     tempLists[i].percentageCompleted = (tempCompleted)? (tempCompleted / tempTasks.length) * 100: 0
